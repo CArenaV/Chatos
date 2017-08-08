@@ -9,12 +9,13 @@
 import Foundation
 
 
-protocol ChatOnProtocol{
+@objc protocol ChatOnProtocol{
     
-    func loginSuccess()->Void
-    func loginFailed(reason: String)-> Void
-    func connectSuccess() -> Void
-    func connectFailed(reason: String)-> Void
+    @objc optional func loginSuccess()->Void
+    @objc optional func loginFailed(reason: String)-> Void
+    @objc optional func connectSuccess() -> Void
+    @objc optional func connectFailed(reason: String)-> Void
+    @objc optional func recievedMessage(additionalInfo: [String:Any])-> Void
     var name: String { get }
 
 }

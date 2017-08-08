@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="atz-Bt-37m" customClass="MessageViewIncoming" customModule="Chattos">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ctw-b5-Rbq" userLabel="Cell top label" customClass="JSQMessagesLabel">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+                        <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="Rla-pq-DZM"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXJ-uF-rKu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
+                        <rect key="frame" x="0.0" y="20" width="320" height="20"/>
+                        <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="hMa-67-92l"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yeS-MU-OyI" userLabel="Bubble container">
+                        <rect key="frame" x="36" y="40" width="244" height="94"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mey-Xg-1AS" userLabel="Bubble Image View">
+                                <rect key="frame" x="0.0" y="0.0" width="244" height="94"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Llt-rK-LP6" customClass="JSQMessagesCellTextView">
+                                <rect key="frame" x="6" y="0.0" width="238" height="94"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="mey-Xg-1AS" secondAttribute="bottom" id="5D2-pQ-yan"/>
+                            <constraint firstAttribute="trailing" secondItem="Llt-rK-LP6" secondAttribute="trailing" id="7m2-Au-saj"/>
+                            <constraint firstItem="mey-Xg-1AS" firstAttribute="leading" secondItem="yeS-MU-OyI" secondAttribute="leading" id="CXP-Ua-irg"/>
+                            <constraint firstAttribute="bottom" secondItem="Llt-rK-LP6" secondAttribute="bottom" id="H5c-RU-vXM"/>
+                            <constraint firstAttribute="trailing" secondItem="mey-Xg-1AS" secondAttribute="trailing" id="Mjg-KQ-M3s"/>
+                            <constraint firstItem="Llt-rK-LP6" firstAttribute="leading" secondItem="yeS-MU-OyI" secondAttribute="leading" constant="6" id="PYt-BC-KdB"/>
+                            <constraint firstItem="Llt-rK-LP6" firstAttribute="top" secondItem="yeS-MU-OyI" secondAttribute="top" id="f90-M2-pfz"/>
+                            <constraint firstItem="mey-Xg-1AS" firstAttribute="top" secondItem="yeS-MU-OyI" secondAttribute="top" id="hgw-59-SdP"/>
+                            <constraint firstAttribute="width" constant="244" id="pWy-DZ-mGX"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z2H-93-F9d" userLabel="Avatar container">
+                        <rect key="frame" x="0.0" y="100" width="34" height="34"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CVD-C4-2yb" userLabel="Avatar Image View">
+                                <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="34" id="5GC-X9-dRG"/>
+                            <constraint firstAttribute="trailing" secondItem="CVD-C4-2yb" secondAttribute="trailing" id="5ny-RM-RYX"/>
+                            <constraint firstItem="CVD-C4-2yb" firstAttribute="top" secondItem="z2H-93-F9d" secondAttribute="top" id="YwE-F2-Xrd"/>
+                            <constraint firstItem="CVD-C4-2yb" firstAttribute="leading" secondItem="z2H-93-F9d" secondAttribute="leading" id="cFC-2z-YOZ"/>
+                            <constraint firstAttribute="bottom" secondItem="CVD-C4-2yb" secondAttribute="bottom" id="doc-V8-ba3"/>
+                            <constraint firstAttribute="width" constant="34" id="uks-pO-qHe"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fjg-qV-GUP" userLabel="Cell bottom label" customClass="JSQMessagesLabel">
+                        <rect key="frame" x="0.0" y="134" width="320" height="20"/>
+                        <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="cvX-Xc-RtD"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="fjg-qV-GUP" firstAttribute="top" secondItem="z2H-93-F9d" secondAttribute="bottom" id="AtJ-vx-ZY4"/>
+                <constraint firstItem="Ctw-b5-Rbq" firstAttribute="top" secondItem="atz-Bt-37m" secondAttribute="top" id="Dy5-WU-TRA"/>
+                <constraint firstItem="fjg-qV-GUP" firstAttribute="top" secondItem="yeS-MU-OyI" secondAttribute="bottom" id="E9p-Ff-2Db"/>
+                <constraint firstAttribute="trailing" secondItem="Ctw-b5-Rbq" secondAttribute="trailing" id="Eng-gC-dkp"/>
+                <constraint firstItem="yeS-MU-OyI" firstAttribute="leading" secondItem="z2H-93-F9d" secondAttribute="trailing" constant="2" id="Ien-P3-sPa"/>
+                <constraint firstAttribute="bottom" secondItem="fjg-qV-GUP" secondAttribute="bottom" id="SlO-MM-M3y"/>
+                <constraint firstItem="fjg-qV-GUP" firstAttribute="leading" secondItem="atz-Bt-37m" secondAttribute="leading" id="TsL-BR-zNp"/>
+                <constraint firstAttribute="trailing" secondItem="fjg-qV-GUP" secondAttribute="trailing" id="XwA-Zq-fkq"/>
+                <constraint firstItem="yeS-MU-OyI" firstAttribute="top" secondItem="rXJ-uF-rKu" secondAttribute="bottom" id="hKh-QJ-RhB"/>
+                <constraint firstItem="z2H-93-F9d" firstAttribute="leading" secondItem="atz-Bt-37m" secondAttribute="leading" id="ith-mm-aG5"/>
+                <constraint firstAttribute="trailing" secondItem="rXJ-uF-rKu" secondAttribute="trailing" id="jZT-GJ-ezY"/>
+                <constraint firstItem="Ctw-b5-Rbq" firstAttribute="leading" secondItem="atz-Bt-37m" secondAttribute="leading" id="tXg-KU-PSm"/>
+                <constraint firstItem="rXJ-uF-rKu" firstAttribute="leading" secondItem="atz-Bt-37m" secondAttribute="leading" id="u75-jc-YnU"/>
+                <constraint firstItem="rXJ-uF-rKu" firstAttribute="top" secondItem="Ctw-b5-Rbq" secondAttribute="bottom" id="ujG-AY-h8Z"/>
+            </constraints>
+            <size key="customSize" width="317" height="245"/>
+            <connections>
+                <outlet property="avatarContainerView" destination="z2H-93-F9d" id="dqv-kQ-x6e"/>
+                <outlet property="avatarContainerViewHeightConstraint" destination="5GC-X9-dRG" id="src-ya-yIM"/>
+                <outlet property="avatarContainerViewWidthConstraint" destination="uks-pO-qHe" id="EUw-tc-WMf"/>
+                <outlet property="avatarImageView" destination="CVD-C4-2yb" id="rCz-1B-Vm7"/>
+                <outlet property="cellBottomLabel" destination="fjg-qV-GUP" id="tGx-SQ-BF3"/>
+                <outlet property="cellBottomLabelHeightConstraint" destination="cvX-Xc-RtD" id="TNI-3E-qbY"/>
+                <outlet property="cellTopLabel" destination="Ctw-b5-Rbq" id="7nX-OZ-6vo"/>
+                <outlet property="cellTopLabelHeightConstraint" destination="Rla-pq-DZM" id="T7c-Z7-ecY"/>
+                <outlet property="messageBubbleContainerView" destination="yeS-MU-OyI" id="3yH-sH-8CR"/>
+                <outlet property="messageBubbleContainerWidthConstraint" destination="pWy-DZ-mGX" id="TKY-ZR-V81"/>
+                <outlet property="messageBubbleImageView" destination="mey-Xg-1AS" id="uSU-2y-zRj"/>
+                <outlet property="messageBubbleTopLabel" destination="rXJ-uF-rKu" id="TJl-V4-pnk"/>
+                <outlet property="messageBubbleTopLabelHeightConstraint" destination="hMa-67-92l" id="7OQ-AS-crB"/>
+                <outlet property="textView" destination="Llt-rK-LP6" id="jlL-PS-i5O"/>
+                <outlet property="textViewAvatarHorizontalSpaceConstraint" destination="PYt-BC-KdB" id="2Vs-zs-JUb"/>
+                <outlet property="textViewBottomVerticalSpaceConstraint" destination="H5c-RU-vXM" id="Rpo-9p-eNb"/>
+                <outlet property="textViewMarginHorizontalSpaceConstraint" destination="7m2-Au-saj" id="PEU-yD-57f"/>
+                <outlet property="textViewTopVerticalSpaceConstraint" destination="f90-M2-pfz" id="qYc-fR-GUY"/>
+            </connections>
+            <point key="canvasLocation" x="255" y="202"/>
+        </collectionViewCell>
+    </objects>
+</document>

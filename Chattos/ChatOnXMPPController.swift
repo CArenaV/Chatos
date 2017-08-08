@@ -10,21 +10,27 @@ import Foundation
 import XMPPFramework
 import CocoaLumberjack
 import SwiftyBeaver
+import JSQMessagesViewController
 
 
 enum XMPPControllerError: Error {
     case wrongUserJID
 }
 
-public class ChatOnXMPPController: NSObject{
+public class ChatOnXMPPController: NSObject, XMPPStreamDelegate{
     
     var hostName: String!
     var jabberId: XMPPJID!
     var hostPort: UInt16!
     var password: String!
+    var _isIQSent: Bool!
     //let domain:String!
     
     static let sharedInstance = ChatOnXMPPController();
+    
+    private override init(){
+        _isIQSent = false
+    }
         /*
      Central XMPP Interface between Application and XMPP Server for Messaging.
      */
@@ -32,18 +38,23 @@ public class ChatOnXMPPController: NSObject{
     var listeners: [Int:[ChatOnProtocol?]] = [:];
     var xmppStream:XMPPStream!
     
-    func xmppStreamConnectDidTimeout(_ sender: XMPPStream!)  {
+    public func xmppStreamConnectDidTimeout(_ sender: XMPPStream!)  {
         
     }
     
     
-    func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!){
-        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.INT_CONNECT_TIMEOUT, error: "There was an issue connecting to the domain: \(self.hostName!)")
+    public func xmppStreamDidDisconnect(_ sender: XMPPStream!, withError error: Error!){
+        var oA:[String:Any?] = [String:Any]();
+        
+        oA["error"] = "There was an issue connecting to the domain: \(self.hostName!)"
+        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.INT_CONNECT_TIMEOUT, optionalAttribs:oA)
     }
     
-    func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!){
+    public func xmppStream(_ sender: XMPPStream!, didNotAuthenticate error: DDXMLElement!){
+        var oA:[String:Any?] = [String:Any]();
+        oA["error"] = "\(error.stringValue!)"
         SwiftyBeaver.info("[LOGGER ] Not authenitcated : \(error)");
-        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.INT_LOGIN_FAILURE, error: error.stringValue!)
+        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.INT_LOGIN_FAILURE, optionalAttribs: oA)
     }
     
     func registerForEvents(caller: ChatOnProtocol, event: ChatOnXMPPEvents){
@@ -63,11 +74,12 @@ public class ChatOnXMPPController: NSObject{
     
     
     
-    func build(jabberId :String, password:String) throws{
+    func build(jabberId :String, password:String, ip: String) throws{
         guard let userJID = XMPPJID(string: jabberId) else {
             throw XMPPControllerError.wrongUserJID
         }
-        self.hostName = Constants.hostName
+        
+        self.hostName = ip
         self.jabberId = userJID
         self.hostPort = Constants.port
         self.password = password
@@ -98,7 +110,7 @@ public class ChatOnXMPPController: NSObject{
     
     
     
-    func invokeRegisteredListeners(forEvent : ChatOnXMPPEvents, error: String) -> Void{
+    func invokeRegisteredListeners(forEvent : ChatOnXMPPEvents, optionalAttribs : [String:Any]) -> Void{
         
         SwiftyBeaver.info("[LOGGER] Invoking registered listeners for \(forEvent)")
         switch forEvent.rawValue {
@@ -109,7 +121,7 @@ public class ChatOnXMPPController: NSObject{
                 {
                     for i in callers{
                         SwiftyBeaver.info("[LOGGER]Invoking \(forEvent) for \(String(describing: i?.name))")
-                        i?.connectSuccess();
+                        i?.connectSuccess!();
                     }
                 }
             }
@@ -123,7 +135,7 @@ public class ChatOnXMPPController: NSObject{
                 {
                     for i in callers{
                         SwiftyBeaver.info("[LOGGER]Invoking \(forEvent) for \(String(describing: i?.name))")
-                        i?.loginSuccess();
+                        i?.loginSuccess!();
                         
                         
                     }
@@ -133,14 +145,27 @@ public class ChatOnXMPPController: NSObject{
             
             
             break;
-        case ChatOnXMPPEvents.MESSAGES_EVENT.rawValue:
+        case ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT.rawValue:
             for (event, callers) in listeners {
-                SwiftyBeaver.info("[LOGGER]----- \(event) \(callers)")
+                SwiftyBeaver.info("[LOGGER]----- \(event) \(callers), Reciever Key: \(optionalAttribs[Constants.RECIEVER_KEY])")
                 if(event == forEvent.rawValue)
                 {
                     for i in callers{
                         SwiftyBeaver.info("[LOGGER]Invoking \(forEvent) for \(String(describing: i?.name))")
-                        //i.message();
+                        if(optionalAttribs[Constants.MESSAGE_SUBEVENT_KEY] != nil){
+                            var oA = [String:Any]()
+                            oA[Constants.MESSAGE_SUBEVENT_KEY] = optionalAttribs[Constants.MESSAGE_SUBEVENT_KEY]
+                            oA[Constants.RECIEVER_KEY] = optionalAttribs[Constants.RECIEVER_KEY]
+                        i?.recievedMessage!(additionalInfo: oA);
+                        }else{
+                            var oA = [String:Any]()
+
+                            oA[Constants.RECIEVER_KEY] = optionalAttribs[Constants.RECIEVER_KEY]
+                            oA[Constants.MESSAGE_SUBEVENT_KEY] = "RECIEVE_MESSAGES_EVENT"
+                            oA[Constants.MESSAGE_CONTENT] = optionalAttribs[Constants.MESSAGE_CONTENT]
+                                oA[Constants.MESSAGE_JSQ_EXT] = optionalAttribs[Constants.MESSAGE_JSQ_EXT]
+                                i?.recievedMessage!(additionalInfo: oA);
+                        }
                     }
                 }
                 
@@ -154,7 +179,7 @@ public class ChatOnXMPPController: NSObject{
                 {
                     for i in callers{
                         SwiftyBeaver.info("[LOGGER]Invoking \(forEvent) for \(String(describing: i?.name))")
-                        i?.loginFailed(reason:error);
+                        i?.loginFailed!(reason:optionalAttribs["error"] as! String);
                     }
                 }
                 
@@ -168,7 +193,7 @@ public class ChatOnXMPPController: NSObject{
                 {
                     for i in callers{
                         SwiftyBeaver.info("[LOGGER]Invoking \(forEvent) for \(String(describing: i?.name))")
-                        i?.loginFailed(reason: error);
+                        i?.loginFailed!( reason:optionalAttribs["error"] as! String);
                     }
                 }
                 
@@ -185,14 +210,154 @@ public class ChatOnXMPPController: NSObject{
         
     }
     
-    func xmppStreamDidConnect(_ stream: XMPPStream!) {
-        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.CONNECT,error: "");
+    func knownUserForJid(jidStr: String!) -> Bool{
+        if  (ObjectContainer.sharedInstance.messagePlayer.msgDict.index(forKey: jidStr) != nil){
+            return true
+        }
+        return false
+        
+    }
+    
+    public func xmppStreamDidConnect(_ stream: XMPPStream!) {
+        var oA:[String:Any?] = [String:Any]();
+        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.CONNECT,optionalAttribs: oA);
         try! stream.authenticate(withPassword: self.password)
     }
     
-    func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
+    func addUserToChatList(senderJidStr: String!,recieverJidStr:String!,  message: JSQMessageExtension){
+        let senderUserJID = XMPPJID.init(string: senderJidStr)
+        let recieverUserJID = XMPPJID.init(string: recieverJidStr)
+
+        ObjectContainer.sharedInstance.xmppRoster.addUser(senderUserJID!, withNickname: senderJidStr)
+        if  ObjectContainer.sharedInstance.messagePlayer.msgDict.index(forKey: recieverJidStr) == nil{
+            SwiftyBeaver.warning("Here 1")
+            var chatElement = ChatElement()
+            chatElement.lastMsg = message.jsqMsgObject.text
+            chatElement.messagesE
+                = [message]
+            
+            chatElement.name = ObjectContainer.sharedInstance.xmppRosterStorage.user(for: senderUserJID, xmppStream: xmppStream, managedObjectContext: ObjectContainer.sharedInstance.moc!).displayName
+            chatElement.senderId = senderJidStr
+            chatElement.lastMsgTS = message.date
+            ObjectContainer.sharedInstance.messagePlayer.msgDict.updateValue(chatElement, forKey: recieverJidStr)
+        }else{
+            SwiftyBeaver.warning("Here 2")
+
+            var chatElement =  ObjectContainer.sharedInstance.messagePlayer.msgDict[recieverJidStr]
+
+            chatElement?.lastMsg = message.jsqMsgObject.text
+            chatElement?.lastMsgTS = message.date
+            chatElement?.messagesE.append(message)
+            ObjectContainer.sharedInstance.messagePlayer.msgDict.updateValue(chatElement!, forKey: recieverJidStr)
+        }
+    }
+    
+ 
+    func getAllRegisteredUsers()
+    {
+        SwiftyBeaver.info("GetAllRegUsers Invoked")
+    var query = try? XMLElement(xmlString: "<query xmlns='http://jabber.org/protocol/disco#items' node='all users'/>")
+        
+     var iq =   XMPPIQ(type: "get", to: XMPPJID(string:"localhost"), elementID:
+            xmppStream.generateUUID(), child: query)
+        SwiftyBeaver.debug(iq);
+        _isIQSent = true
+        xmppStream.send(iq)
+
+    }
+
+    
+
+    public func xmppStream(_ sender: XMPPStream!, didReceive iq: XMPPIQ!) -> Bool {
+        print("Did receive IQ")
+        var queryElement: XMLElement? = iq.forName("query", xmlns: "http://jabber.org/protocol/disco#items")
+        var itemElements = queryElement?.elements(forName: "item")
+        if itemElements == nil{
+            SwiftyBeaver.info("IQ Empty Elements")
+            return true
+        }
+        _isIQSent = false
+        var mArray = NSMutableArray()
+        for i in itemElements!{
+            var t = i as? DDXMLElement
+            SwiftyBeaver.info(t)
+        var jid = t?.attribute(forName: "jid")
+            SwiftyBeaver.info(jid)
+            SwiftyBeaver.error("Here we are : \(knownUserForJid(jidStr: jid?.stringValue))")
+        mArray.add(jid)
+
+        }
+
+        
+        return true
+        
+        print("End receive IQ")
+
+    }
+    
+    
+    
+     public func xmppStream(_ sender: XMPPStream!, didReceive message: XMPPMessage) {
+        
+        SwiftyBeaver.info("Recieved Message : \(message.from())");
+        SwiftyBeaver.error("Message \(ObjectContainer.sharedInstance.moc)")
+        
+        if(ObjectContainer.sharedInstance.moc != nil){
+            SwiftyBeaver.warning("MOC is Not Nil")
+            if message.isMessageWithBody(){
+               // getAllRegisteredUsers()
+                let user = ObjectContainer.sharedInstance.xmppRosterStorage.user(for: message.from(), xmppStream: xmppStream, managedObjectContext: ObjectContainer.sharedInstance.moc)
+                if let msg: String = message.forName("body")?.stringValue {
+                    if let from: String = message.attribute(forName: "from")?.stringValue {
+                        let updatedFrom = from.components(separatedBy: "/")[0]
+                        let messageX = JSQMessage(senderId: updatedFrom, senderDisplayName: updatedFrom, date: NSDate() as Date!, text: msg)
+                        let recieverJidStr = (message.attribute(forName: "to")?.stringValue?.components(separatedBy: "/")[0])
+                        SwiftyBeaver.warning("Message to : \(recieverJidStr)")
+                         var jsqMsgEx = Utils.convXMPPMsgToJSQMsgExt(xmppMessage: message)
+                        addUserToChatList(senderJidStr: user?.jidStr, recieverJidStr: recieverJidStr, message: jsqMsgEx)
+                        var oA:[String:Any?] = [String:Any]();
+                        oA[Constants.RECIEVER_KEY] = recieverJidStr
+                        oA[Constants.MESSAGE_CONTENT] = msg
+                       
+                        oA[Constants.MESSAGE_JSQ_EXT] = jsqMsgEx
+
+   invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT, optionalAttribs: oA)
+                        
+                    }
+                }
+                
+                
+                
+            }else if message.forName("composing")?.stringValue != nil{
+                let recieverJidStr = (message.attribute(forName: "to")?.stringValue?.components(separatedBy: "/")[0])
+
+                var oA:[String:Any? ] = [String:Any]();
+                let from: String = (message.attribute(forName: "from")?.stringValue)!
+                oA[Constants.MESSAGE_SUBEVENT_KEY]=ChatOnXMPPEvents.RECIEVE_MESSAGES_COMPOSING_EVENT
+                oA[Constants.RECIEVER_KEY] = recieverJidStr
+                invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT, optionalAttribs: oA)
+                
+            }else if message.forName("paused")?.stringValue != nil{
+                var oA:[String:Any?] = [String:Any]();
+                let recieverJidStr = (message.attribute(forName: "to")?.stringValue?.components(separatedBy: "/")[0])
+
+
+                oA[Constants.MESSAGE_SUBEVENT_KEY]=ChatOnXMPPEvents.RECIEVE_MESSAGES_PAUSED_EVENT
+                oA[Constants.RECIEVER_KEY] = recieverJidStr
+                invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT, optionalAttribs: oA)
+                
+            }
+        
+        
+            
+         
+        }
+    }
+    
+    public func xmppStreamDidAuthenticate(_ sender: XMPPStream!) {
         self.xmppStream.send(XMPPPresence())
-        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.LOGIN_EVENT,error: "");
+        var oA:[String:Any? ] = [String:Any]();
+        invokeRegisteredListeners(forEvent: ChatOnXMPPEvents.LOGIN_EVENT,optionalAttribs: oA);
     }
     
     
