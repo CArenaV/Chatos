@@ -9,11 +9,13 @@
 import UIKit
 import XMPPFramework
 import UserNotifications
+import Contacts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
 
    
 
@@ -22,11 +24,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             // Enable or disable features based on authorization.
         }
+        
+        let store = CNContactStore()
+        store.requestAccess(for: .contacts) { granted, error in
+            guard granted else {
+                print("Contacts Access not Provided!")
+                return
+            }
+            
+        }
+        
+        
+        
+        
+        
         return true
+        
+        
+        
+        // open it
+        
+        
     }
 
-
-    
+        
     func applicationDidFinishLaunching(_ aNotification: Notification)
 {
             }

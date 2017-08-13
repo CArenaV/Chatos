@@ -57,14 +57,14 @@ class Utils{
                         sender = displayName!
                     }
                 } else {
-                    SwiftyBeaver.info(" To doesn't contain the JID")
+                   // SwiftyBeaver.info(" To doesn't contain the JID")
                     sender = jid
                 }
                 
                 
                 var rng = sender.range(of: "/")
                 if rng != nil{
-                    SwiftyBeaver.info(rng)
+                    // SwiftyBeaver.info(rng)
                     sender = sender.components(separatedBy: "/")[0]
                     
                 }
@@ -91,8 +91,22 @@ class Utils{
         return sortedRetrievedMessages.mutableCopy() as! NSMutableArray
     }
     
-    static func syncMessages(){
+    static func syncMessages(forUsr: String!, message: JSQMessageExtension){
+        let chatElementForUser = MessagePlayer.sharedInstance.msgDict[forUsr]
+        var jsqMsgExtAr = chatElementForUser?.messagesE
+        jsqMsgExtAr?.append(message)
+        chatElementForUser?.messagesE = jsqMsgExtAr
+        MessagePlayer.sharedInstance.msgDict.updateValue(chatElementForUser!, forKey: forUsr)
         
+    }
+    
+    static func syncMessages(forUsr: String!, message: XMPPMessage){
+        let chatElementForUser = MessagePlayer.sharedInstance.msgDict[forUsr]
+        var jsqMsgExtAr = chatElementForUser?.messagesE
+        let jsqMsg = convXMPPMsgToJSQMsgExt(xmppMessage: message)
+        jsqMsgExtAr?.append(jsqMsg)
+        chatElementForUser?.messagesE = jsqMsgExtAr
+        MessagePlayer.sharedInstance.msgDict.updateValue(chatElementForUser!, forKey: forUsr)
     }
     
     static func convXMPPMsgArToJSQMsgExtAr(xmppMessages: [XMPPMessage]) -> [JSQMessageExtension]{
@@ -116,6 +130,33 @@ class Utils{
         }
         return jsgMsgExtAr
     }
+    
+    static func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / image.size.width
+        let heightRatio = targetSize.height / image.size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    
     
     static func convXMPPMsgToJSQMsgExt(xmppMessage: XMPPMessage) -> JSQMessageExtension{
             let msgText:String? = xmppMessage.forName("body")?.stringValue

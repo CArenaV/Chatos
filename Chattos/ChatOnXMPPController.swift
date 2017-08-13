@@ -58,18 +58,30 @@ public class ChatOnXMPPController: NSObject, XMPPStreamDelegate{
     }
     
     func registerForEvents(caller: ChatOnProtocol, event: ChatOnXMPPEvents){
-        SwiftyBeaver.info("[LOGGER]In registerForEvents");
-        var existingObjects = listeners[event.rawValue] as? [ChatOnProtocol]
+        SwiftyBeaver.info(caller)
+        SwiftyBeaver.error(listeners)
+        SwiftyBeaver.info("[LOGGER]In registerForEvents \(caller.name)");
         
+        var existingObjects = listeners[event.rawValue]
         if(existingObjects != nil){
-            existingObjects?.append(caller)
-            
+            if(type(of:caller) == ViewChat.self){
+              existingObjects?.removeAll()
+                
+                existingObjects?.append(caller)
+                
+                SwiftyBeaver.info(existingObjects)
+                    listeners[event.rawValue] = existingObjects
+
+            }
             SwiftyBeaver.info("[LOGGER]Registering \(caller.name), for Event: \(event) - Queue Size = \(String(describing: existingObjects?.count))")
+            listeners[event.rawValue] = existingObjects
         }else{
-            
             listeners.updateValue([caller], forKey: event.rawValue)
             SwiftyBeaver.info("[LOGGER]Registering \(caller.name), for Event: \(event) via an Update Operation")
+            
         }
+        SwiftyBeaver.warning(listeners)
+
     }
     
     

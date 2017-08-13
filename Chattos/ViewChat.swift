@@ -15,6 +15,8 @@ import JSQMessagesViewController
 import CoreData
 import UserNotificationsUI
 import UserNotifications
+import Photos
+
 
 class ViewChat: JSQMessagesViewController, ChatOnProtocol{
     var name:String = ""
@@ -23,11 +25,22 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
     @IBOutlet weak var status: UIBarButtonItem!
     @IBOutlet var chatArea: UIView!
     var chatFor:String!
+    
     @IBAction func backBtnPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
 
         
     }
+ 
+    
+    
+    required init(coder:NSCoder){
+        SwiftyBeaver.info("I am invoked" )
+        super.init(coder: coder)!
+        ChatOnXMPPController.sharedInstance.registerForEvents(caller: self, event: ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT)
+
+    }
+    
     
     func recievedMessage(additionalInfo: [String:Any])-> Void{
         
@@ -53,20 +66,23 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
             } else{
            // status.title = "Online"
             SwiftyBeaver.verbose("Logging Event : Message Recieved \(reciever) \(chatFor)")
-            var chatElement = MessagePlayer.sharedInstance.msgDict[chatFor]
-            messages = (chatElement?.messagesE)!
+            SwiftyBeaver.info(MessagePlayer.sharedInstance.msgDict[chatFor]?.messagesE.count)
         JSQSystemSoundPlayer.jsq_playMessageReceivedSound() // 4
-            if(reciever != chatFor){
+            var jsqMsgE = additionalInfo[Constants.MESSAGE_JSQ_EXT] as? JSQMessageExtension
+
+            Utils.syncMessages(forUsr: chatFor, message: jsqMsgE!)
+            
+            chatElement = MessagePlayer.sharedInstance.msgDict[chatFor]
+            
+            messages = chatElement.messagesE
+            if(jsqMsgE?.senderId != chatFor){
                 SwiftyBeaver.warning(" Going to Send the Notification")
                 var msg:String = (additionalInfo[Constants.MESSAGE_CONTENT] as! String)
-                var jsqMsgE = additionalInfo[Constants.MESSAGE_JSQ_EXT] as? JSQMessageExtension
-                messages.append(jsqMsgE!)
-                MessagePlayer.sharedInstance.msgDict.updateValue((chatElement)!, forKey: chatFor)
                 triggerNotification(message: msg, sender: reciever!)
             }
             
-            
-        self.finishReceivingMessage()
+            finishSendingMessage()
+            finishReceivingMessage(animated: true)
         }
     }
 
@@ -120,7 +136,7 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
     
     
         override func viewDidLoad() {
-        super.viewDidLoad()
+            super.viewDidLoad()
             name = "ViewChat"
             SwiftyBeaver.error("Sender ID \(self.senderId)")
             status.isEnabled = false
@@ -133,7 +149,6 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
             status.title = ""
             
             chatElement = MessagePlayer.sharedInstance.msgDict[chatFor]
-            ChatOnXMPPController.sharedInstance.registerForEvents(caller: self, event: ChatOnXMPPEvents.RECIEVE_MESSAGES_EVENT)
             self.edgesForExtendedLayout = []
             
 
@@ -155,6 +170,8 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
                     
                 }
             }
+            
+        
             button.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
             imageBarBtn.customView = button
             messages = chatElement.messagesE
@@ -172,6 +189,7 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        SwiftyBeaver.warning(" i am invoked \(indexPath.row)")
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCell
         let message = messages[indexPath.item]
         
@@ -214,28 +232,28 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
     }
     
     
+    
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         
            let xmppProcessor = ChatOnXMPPController.sharedInstance
            let xmppStream = xmppProcessor.xmppStream
-
+           SwiftyBeaver.info("----------\(text)")
     
 
     let msg = XMPPMessage(type: "chat", to: XMPPJID(string: chatFor))
-    //var message = "How are you my friend!!"
         status.title = "Online"
-    msg?.addBody(text)
-    SwiftyBeaver.info(msg)
-    xmppStream?.send(msg);
-        JSQSystemSoundPlayer.jsq_playMessageSentSound() // 4
+        msg?.addBody(text)
+        xmppStream?.send(msg);
         
-        var jsqMsgEx = Utils.convXMPPMsgToJSQMsgExt(xmppMessage: msg!)
+        let jsqMsgEx = Utils.convXMPPMsgToJSQMsgExt(xmppMessage: msg!)
+        MessagePlayer.sharedInstance.msgDict[chatFor]?.messagesE.append(jsqMsgEx)
+        var chatElement = MessagePlayer.sharedInstance.msgDict[chatFor]
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
         messages.append(jsqMsgEx)
         finishSendingMessage() // 5
 
         self.finishReceivingMessage()
         
-    
         }
     public func getPhotoForUser(user: XMPPUserCoreDataStorageObject) -> UIImage {
         
@@ -252,8 +270,21 @@ class ViewChat: JSQMessagesViewController, ChatOnProtocol{
         }
     }
     
-    
-    
+    override func didPressAccessoryButton(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)) {
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+        } else {
+            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        }
+        
+        present(picker, animated: true, completion:nil)
+    }
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        self.inputToolbar.maximumHeight = 500
+    }
     
 }
 
@@ -280,3 +311,80 @@ extension ViewChat:UNUserNotificationCenterDelegate{
     }
 }
 
+
+extension ViewChat: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+       
+        SwiftyBeaver.info(info)
+        // 1
+        if let image = info[UIImagePickerControllerOriginalImage] {
+            
+            picker.dismiss(animated: true, completion:{
+                let imageView: UIImageView = UIImageView(image: image as! UIImage)
+                
+                imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+                self.inputToolbar.preferredDefaultHeight = 120
+
+                //self.inputToolbar.contentView.textView.frame.size = imageView.frame.size
+                //self.inputToolbar.contentView.textView.addSubview(imageView)
+//                let attachment = NSTextAttachment()
+//                attachment.image = Utils.resizeImage(image: image as! UIImage, targetSize: CGSize.init(width: 100, height: 100))
+//                
+                var attributedString :NSMutableAttributedString!
+                attributedString = NSMutableAttributedString(attributedString:self.inputToolbar.contentView.textView.attributedText)
+                let textAttachment = NSTextAttachment()
+                textAttachment.image = image as! UIImage
+                
+                let oldWidth = textAttachment.image!.size.width;
+                
+                //I'm subtracting 10px to make the image display nicely, accounting
+                //for the padding inside the textView
+                
+                let scaleFactor = oldWidth / (self.inputToolbar.contentView.textView.frame.size.width - 10);
+                textAttachment.image = UIImage(cgImage: textAttachment.image!.cgImage!, scale: scaleFactor, orientation: .up)
+                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                attributedString.append(attrStringWithImage)
+                attributedString.append(NSAttributedString(string: "\n"))
+                self.inputToolbar.contentView.textView.attributedText = attributedString;
+                
+                self.inputToolbar.contentView.textView.becomeFirstResponder()
+                
+                
+                
+                
+                
+                
+               // var attString = NSAttributedString(attachment: attachment)
+                
+//                self.inputToolbar.contentView.textView.textStorage.insert(attString, at: self.inputToolbar.contentView.textView.selectedRange.location)
+                
+                
+                
+            })
+            
+            
+            var jsqPhoto:JSQPhotoMediaItem = JSQPhotoMediaItem(image: image as! UIImage)
+            var jsqMsg = JSQMessage(senderId: senderId, displayName: senderDisplayName, media: jsqPhoto)
+            var jsqMsgEx = JSQMessageExtension()
+            jsqMsgEx.date = NSDate()
+            jsqMsgEx.id = UUID.init().uuidString
+            jsqMsgEx.senderId = senderId
+            jsqMsgEx.to = chatFor
+            jsqMsgEx.jsqMsgObject = jsqMsg
+            Utils.syncMessages(forUsr: chatFor, message: jsqMsgEx)
+            messages = chatElement.messagesE
+           // self.inputToolbar.inputViewController?.inputView?.addSubview(imageView)
+            
+           // collectionView.reloadData()
+        } else {
+            // Handle picking a Photo from the Camera - TODO
+        }
+        
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion:nil)
+    }
+}
