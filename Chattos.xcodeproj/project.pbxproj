@@ -9,8 +9,13 @@
 /* Begin PBXBuildFile section */
 		70882A589CB2F93388DCC675 /* Pods_Chattos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A368C57668ADA80D7252B7B1 /* Pods_Chattos.framework */; };
 		B406A2F11F2694B20013B73F /* MainChatWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B406A2F01F2694B20013B73F /* MainChatWindowView.swift */; };
+		B40841191F40D59000455821 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B40841101F40D59000455821 /* FMDatabase.m */; };
+		B408411A1F40D59000455821 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = B40841121F40D59000455821 /* FMResultSet.m */; };
+		B408411B1F40D59000455821 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B40841141F40D59000455821 /* FMDatabaseQueue.m */; };
+		B408411C1F40D59000455821 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B40841161F40D59000455821 /* FMDatabaseAdditions.m */; };
+		B408411D1F40D59000455821 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = B40841181F40D59000455821 /* FMDatabasePool.m */; };
 		B4088FE11F23FA7B008E6518 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4088FE01F23FA7B008E6518 /* AppDelegate.swift */; };
-		B4088FE31F23FA7B008E6518 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4088FE21F23FA7B008E6518 /* ViewController.swift */; };
+		B4088FE31F23FA7B008E6518 /* ViewControllerD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4088FE21F23FA7B008E6518 /* ViewControllerD.swift */; };
 		B4088FE61F23FA7B008E6518 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4088FE41F23FA7B008E6518 /* Main.storyboard */; };
 		B4088FE81F23FA7B008E6518 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4088FE71F23FA7B008E6518 /* Assets.xcassets */; };
 		B4088FEB1F23FA7B008E6518 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4088FE91F23FA7B008E6518 /* LaunchScreen.storyboard */; };
@@ -18,6 +23,9 @@
 		B426E0711F399AF900911E3B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B426E0701F399AF900911E3B /* Utils.swift */; };
 		B4308FA61F37A53C00F432CB /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4308FA51F37A53C00F432CB /* AppData.swift */; };
 		B4308FA81F37AD2000F432CB /* JSQMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4308FA71F37AD2000F432CB /* JSQMessageExtension.swift */; };
+		B43F10591F43070000DCC495 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43F10581F43070000DCC495 /* Welcome.swift */; };
+		B44305231F4241F0004A3C9A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B44305221F4241F0004A3C9A /* libsqlite3.tbd */; };
+		B44305251F424303004A3C9A /* InitialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44305241F424303004A3C9A /* InitialController.swift */; };
 		B45E072E1F3A0EAF00886E74 /* MainCWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45E072D1F3A0EAF00886E74 /* MainCWindow.swift */; };
 		B48F35011F26979500BB3967 /* ChatMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48F35001F26979500BB3967 /* ChatMainTableViewCell.swift */; };
 		B48F35031F2697EF00BB3967 /* RowModelMainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48F35021F2697EF00BB3967 /* RowModelMainScreen.swift */; };
@@ -38,9 +46,21 @@
 		45431E6EA0E83CB5E6BCEFCB /* Pods-Chattos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chattos.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chattos/Pods-Chattos.release.xcconfig"; sourceTree = "<group>"; };
 		A368C57668ADA80D7252B7B1 /* Pods_Chattos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chattos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B406A2F01F2694B20013B73F /* MainChatWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainChatWindowView.swift; sourceTree = "<group>"; };
+		B408410D1F40D58F00455821 /* Chattos-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Chattos-Bridging-Header.h"; sourceTree = "<group>"; };
+		B408410E1F40D59000455821 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		B408410F1F40D59000455821 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		B40841101F40D59000455821 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		B40841111F40D59000455821 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		B40841121F40D59000455821 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		B40841131F40D59000455821 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		B40841141F40D59000455821 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		B40841151F40D59000455821 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		B40841161F40D59000455821 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		B40841171F40D59000455821 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		B40841181F40D59000455821 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
 		B4088FDD1F23FA7B008E6518 /* Chattos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chattos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4088FE01F23FA7B008E6518 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B4088FE21F23FA7B008E6518 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B4088FE21F23FA7B008E6518 /* ViewControllerD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerD.swift; sourceTree = "<group>"; };
 		B4088FE51F23FA7B008E6518 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B4088FE71F23FA7B008E6518 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B4088FEA1F23FA7B008E6518 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,6 +70,9 @@
 		B4308FA41F36E5BE00F432CB /* Chattos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chattos.entitlements; sourceTree = "<group>"; };
 		B4308FA51F37A53C00F432CB /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		B4308FA71F37AD2000F432CB /* JSQMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSQMessageExtension.swift; sourceTree = "<group>"; };
+		B43F10581F43070000DCC495 /* Welcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
+		B44305221F4241F0004A3C9A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		B44305241F424303004A3C9A /* InitialController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialController.swift; sourceTree = "<group>"; };
 		B45E072D1F3A0EAF00886E74 /* MainCWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCWindow.swift; sourceTree = "<group>"; };
 		B48F35001F26979500BB3967 /* ChatMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMainTableViewCell.swift; sourceTree = "<group>"; };
 		B48F35021F2697EF00BB3967 /* RowModelMainScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowModelMainScreen.swift; sourceTree = "<group>"; };
@@ -72,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B44305231F4241F0004A3C9A /* libsqlite3.tbd in Frameworks */,
 				70882A589CB2F93388DCC675 /* Pods_Chattos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +110,25 @@
 				45431E6EA0E83CB5E6BCEFCB /* Pods-Chattos.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		B408410C1F40D56C00455821 /* FMDB */ = {
+			isa = PBXGroup;
+			children = (
+				B408410E1F40D59000455821 /* FMDB.h */,
+				B408410F1F40D59000455821 /* FMDatabase.h */,
+				B40841101F40D59000455821 /* FMDatabase.m */,
+				B40841111F40D59000455821 /* FMResultSet.h */,
+				B40841121F40D59000455821 /* FMResultSet.m */,
+				B40841131F40D59000455821 /* FMDatabaseQueue.h */,
+				B40841141F40D59000455821 /* FMDatabaseQueue.m */,
+				B40841151F40D59000455821 /* FMDatabaseAdditions.h */,
+				B40841161F40D59000455821 /* FMDatabaseAdditions.m */,
+				B40841171F40D59000455821 /* FMDatabasePool.h */,
+				B40841181F40D59000455821 /* FMDatabasePool.m */,
+				B408410D1F40D58F00455821 /* Chattos-Bridging-Header.h */,
+			);
+			name = FMDB;
 			sourceTree = "<group>";
 		};
 		B4088FD41F23FA7B008E6518 = {
@@ -110,15 +153,18 @@
 		B4088FDF1F23FA7B008E6518 /* Chattos */ = {
 			isa = PBXGroup;
 			children = (
+				B408410C1F40D56C00455821 /* FMDB */,
 				B4308FA41F36E5BE00F432CB /* Chattos.entitlements */,
 				B4088FE01F23FA7B008E6518 /* AppDelegate.swift */,
-				B4088FE21F23FA7B008E6518 /* ViewController.swift */,
+				B4088FE21F23FA7B008E6518 /* ViewControllerD.swift */,
+				B44305241F424303004A3C9A /* InitialController.swift */,
 				B4174C4D1F2BB245002C0C42 /* ViewChat.swift */,
 				B406A2F01F2694B20013B73F /* MainChatWindowView.swift */,
 				B45E072D1F3A0EAF00886E74 /* MainCWindow.swift */,
 				B49DE2681F3CEE740063A47F /* ContactsVC.swift */,
 				B4308FA71F37AD2000F432CB /* JSQMessageExtension.swift */,
 				B4088FE41F23FA7B008E6518 /* Main.storyboard */,
+				B43F10581F43070000DCC495 /* Welcome.swift */,
 				B49642901F2421B700DA6F18 /* UITextUL.swift */,
 				B4088FE71F23FA7B008E6518 /* Assets.xcassets */,
 				B4088FE91F23FA7B008E6518 /* LaunchScreen.storyboard */,
@@ -142,6 +188,7 @@
 		B69FC43CF1653D0AAB0F1A78 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B44305221F4241F0004A3C9A /* libsqlite3.tbd */,
 				A368C57668ADA80D7252B7B1 /* Pods_Chattos.framework */,
 			);
 			name = Frameworks;
@@ -183,6 +230,7 @@
 					B4088FDC1F23FA7B008E6518 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 4PBQYSSP8B;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -283,23 +331,30 @@
 				B45E072E1F3A0EAF00886E74 /* MainCWindow.swift in Sources */,
 				B4174C4E1F2BB245002C0C42 /* ViewChat.swift in Sources */,
 				B4A7CD3E1F2A93DE00F769C9 /* MessagePlayer.swift in Sources */,
+				B40841191F40D59000455821 /* FMDatabase.m in Sources */,
 				B4308FA81F37AD2000F432CB /* JSQMessageExtension.swift in Sources */,
 				B4E777B01F33DB8000C5BB40 /* MessageViewIncoming.swift in Sources */,
 				B4308FA61F37A53C00F432CB /* AppData.swift in Sources */,
 				B4E1558F1F24DE490090351D /* ChatOnXMPPEvents.swift in Sources */,
+				B408411A1F40D59000455821 /* FMResultSet.m in Sources */,
 				B4C702921F328CC400CBC39F /* ObjectContainer.swift in Sources */,
 				B4E155871F24C7490090351D /* Constants.swift in Sources */,
-				B4088FE31F23FA7B008E6518 /* ViewController.swift in Sources */,
+				B4088FE31F23FA7B008E6518 /* ViewControllerD.swift in Sources */,
+				B408411D1F40D59000455821 /* FMDatabasePool.m in Sources */,
+				B408411B1F40D59000455821 /* FMDatabaseQueue.m in Sources */,
 				B48F35031F2697EF00BB3967 /* RowModelMainScreen.swift in Sources */,
 				B406A2F11F2694B20013B73F /* MainChatWindowView.swift in Sources */,
 				B426E0711F399AF900911E3B /* Utils.swift in Sources */,
 				B48F35011F26979500BB3967 /* ChatMainTableViewCell.swift in Sources */,
 				B49642911F2421B700DA6F18 /* UITextUL.swift in Sources */,
+				B43F10591F43070000DCC495 /* Welcome.swift in Sources */,
 				B4088FE11F23FA7B008E6518 /* AppDelegate.swift in Sources */,
 				B4E1558B1F24DA4C0090351D /* ChatOnXMPPController.swift in Sources */,
 				B4E1558D1F24DBEC0090351D /* ChatOnProtocol.swift in Sources */,
 				B4E777B21F33DBC000C5BB40 /* MessageViewOutgoing.swift in Sources */,
 				B49DE2691F3CEE740063A47F /* ContactsVC.swift in Sources */,
+				B44305251F424303004A3C9A /* InitialController.swift in Sources */,
+				B408411C1F40D59000455821 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Chattos/Chattos.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4PBQYSSP8B;
@@ -435,6 +491,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7ce2220b-6cd1-4fd0-952a-48d7c30ff338";
 				PROVISIONING_PROFILE_SPECIFIER = SSForChatOS;
+				SWIFT_OBJC_BRIDGING_HEADER = "Chattos/Chattos-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -446,6 +504,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Chattos/Chattos.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 4PBQYSSP8B;
@@ -455,6 +514,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7ce2220b-6cd1-4fd0-952a-48d7c30ff338";
 				PROVISIONING_PROFILE_SPECIFIER = SSForChatOS;
+				SWIFT_OBJC_BRIDGING_HEADER = "Chattos/Chattos-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
