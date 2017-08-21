@@ -1,0 +1,6 @@
+framework module Pods_Chattos {
+  umbrella header "Pods-Chattos-umbrella.h"
+
+  export *
+  module * { export * }
+}
